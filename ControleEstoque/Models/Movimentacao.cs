@@ -17,7 +17,7 @@ namespace ControleEstoque.Models {
         [Range(0.01, 9999999999999999.99, ErrorMessage = "O preço deve estar entre 0,01 e 9999999999999999,99.")]
         [Column(TypeName = "decimal(18,2)")]
         [Display(Name = "Preço")]
-
+        [Precision(18, 2)]
         public decimal Preco { get; set; }
 
         [Required]
