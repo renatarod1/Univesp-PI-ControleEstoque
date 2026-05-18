@@ -1,12 +1,13 @@
+using ControleEstoque.Data;
+using ControleEstoque.Models;
+using ControleEstoque.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ControleEstoque.Data;
-using ControleEstoque.Models;
 
 namespace ControleEstoque.Controllers
 {
@@ -20,9 +21,33 @@ namespace ControleEstoque.Controllers
         }
 
         // GET: Produtos
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Produtos.ToListAsync());
+        public async Task<IActionResult> Index() {
+            var produtos = await _context.Produtos
+                .Include(p => p.Movimentacoes)
+                .ToListAsync();
+
+            var lista = produtos.Select(p =>
+            {
+                int entradas = p.Movimentacoes?
+                    .Where(m => m.Tipo == TipoMovimentacao.Entrada)
+                    .Sum(m => m.Quantidade) ?? 0;
+
+                int saidas = p.Movimentacoes?
+                    .Where(m => m.Tipo == TipoMovimentacao.Saida)
+                    .Sum(m => m.Quantidade) ?? 0;
+
+                int estoqueAtual = entradas - saidas;
+
+                return new ProdutoEstoqueViewModel {
+                    Id = p.Id,
+                    Nome = p.Nome,
+                    EstoqueAtual = estoqueAtual,
+                    QtdEstoqueAlerta = p.QtdEstoqueAlerta,
+                    Alerta = estoqueAtual <= p.QtdEstoqueAlerta
+                };
+            }).ToList();
+
+            return View(lista);
         }
 
         // GET: Produtos/Details/5

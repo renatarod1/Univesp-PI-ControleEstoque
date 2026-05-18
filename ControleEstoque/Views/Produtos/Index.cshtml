@@ -1,4 +1,4 @@
-@model IEnumerable<ControleEstoque.Models.Produto>
+@model IEnumerable<ControleEstoque.ViewModels.ProdutoEstoqueViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -12,30 +12,36 @@
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Nome)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.QtdEstoqueAlerta)
-            </th>
-            <th></th>
+            <th>Produto</th>
+            <th>Estoque Atual</th>
+            <th>Qtd Alerta</th>
+            <th>Status</th>
         </tr>
     </thead>
+
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QtdEstoqueAlerta)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr class="@(item.Alerta ? "table-danger" : "")">
+                <td>@item.Nome</td>
+                <td>@item.EstoqueAtual</td>
+                <td>@item.QtdEstoqueAlerta</td>
+
+                <td>
+                    @if (item.Alerta)
+                    {
+                        <span class="badge bg-danger">
+                            ESTOQUE BAIXO
+                        </span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">
+                            OK
+                        </span>
+                    }
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
