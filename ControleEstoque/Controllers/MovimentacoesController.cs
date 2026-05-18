@@ -61,6 +61,37 @@ namespace ControleEstoque.Controllers
         {
             if (ModelState.IsValid)
             {
+                // VALIDAR SAÍDA
+                if (movimentacao.Tipo == TipoMovimentacao.Saida) {
+                    var produto = await _context.Produtos
+                        .Include(p => p.Movimentacoes)
+                        .FirstOrDefaultAsync(p => p.Id == movimentacao.ProdutoId);
+
+                    int entradas = produto.Movimentacoes
+                        .Where(m => m.Tipo == TipoMovimentacao.Entrada)
+                        .Sum(m => m.Quantidade);
+
+                    int saidas = produto.Movimentacoes
+                        .Where(m => m.Tipo == TipoMovimentacao.Saida)
+                        .Sum(m => m.Quantidade);
+
+                    int estoqueAtual = entradas - saidas;
+
+                    // SE A SAÍDA FOR MAIOR QUE O ESTOQUE
+                    if (movimentacao.Quantidade > estoqueAtual) {
+                        ModelState.AddModelError("", "Estoque insuficiente.");
+
+                        ViewData["ProdutoId"] = new SelectList(
+                            _context.Produtos,
+                            "Id",
+                            "Nome",
+                            movimentacao.ProdutoId);
+
+                        return View(movimentacao);
+                    }
+                }
+                //FIM VALIDAR SAÍDA
+
                 _context.Add(movimentacao);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -102,6 +133,37 @@ namespace ControleEstoque.Controllers
             {
                 try
                 {
+
+                    // VALIDAR SAÍDA
+                    if (movimentacao.Tipo == TipoMovimentacao.Saida) {
+                        var produto = await _context.Produtos
+                            .Include(p => p.Movimentacoes)
+                            .FirstOrDefaultAsync(p => p.Id == movimentacao.ProdutoId);
+
+                        int entradas = produto.Movimentacoes
+                            .Where(m => m.Tipo == TipoMovimentacao.Entrada)
+                            .Sum(m => m.Quantidade);
+
+                        int saidas = produto.Movimentacoes
+                            .Where(m => m.Tipo == TipoMovimentacao.Saida)
+                            .Sum(m => m.Quantidade);
+
+                        int estoqueAtual = entradas - saidas;
+
+                        // SE A SAÍDA FOR MAIOR QUE O ESTOQUE
+                        if (movimentacao.Quantidade > estoqueAtual) {
+                            ModelState.AddModelError("", "Estoque insuficiente.");
+
+                            ViewData["ProdutoId"] = new SelectList(
+                                _context.Produtos,
+                                "Id",
+                                "Nome",
+                                movimentacao.ProdutoId);
+
+                            return View(movimentacao);
+                        }
+                    }
+                    //FIM VALIDAR SAÍDA
                     _context.Update(movimentacao);
                     await _context.SaveChangesAsync();
                 }
