@@ -4,9 +4,8 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Editar Produto</h1>
 
-<h4>Produto</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,24 +13,23 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
+                <label asp-for="Nome" class="control-label">Nome (Não editável)</label>
                 <input asp-for="Nome" class="form-control" />
                 <span asp-validation-for="Nome" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
-                <label asp-for="QtdEstoqueAlerta" class="control-label"></label>
+                <label asp-for="QtdEstoqueAlerta" class="control-label">Qual a quantidade mínima permitida do produto em estoque - para emitir alerta?</label>
                 <input asp-for="QtdEstoqueAlerta" class="form-control" />
                 <span asp-validation-for="QtdEstoqueAlerta" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Salvar" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-outline-dark">Voltar para Lista de Produtos</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

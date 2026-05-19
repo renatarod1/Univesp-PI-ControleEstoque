@@ -4,17 +4,16 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
+<h1 class="card-header d-flex justify-content-center py-3">Estoque - Visão geral</h1>
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" class="btn btn-outline-dark btn-lg">Inserir Novo Produto</a>
 </p>
-<table class="table">
+<table class="table table-bordered border-black">
     <thead>
         <tr>
             <th>Produto</th>
-            <th>Estoque Atual</th>
-            <th>Qtd Alerta</th>
+            <th>Total em Estoque</th>
+            <th>Quantidade Mínima</th>
             <th>Status</th>
             <th>Ações</th>
         </tr>
@@ -44,21 +43,22 @@
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id"
-                       class="btn btn-warning btn-sm">
+                       class="btn btn-dark btn-sm">
                         Editar
                     </a>
 
-                    <a asp-action="Details" asp-route-id="@item.Id"
-                       class="btn btn-info btn-sm">
+                    <!--<a asp-action="Details" asp-route-id="@item.Id"
+                       class="btn btn-dark btn-sm">
                         Detalhes
-                    </a>
+                    </a>-->
 
                     <a asp-action="Delete" asp-route-id="@item.Id"
                        class="btn btn-danger btn-sm">
-                        Remover
+                        Excluir
                     </a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
