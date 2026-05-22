@@ -1,4 +1,5 @@
 @model IEnumerable<ControleEstoque.Models.Movimentacao>
+@using ControleEstoque.Models
 
 @{
     ViewData["Title"] = "Index";
@@ -6,10 +7,109 @@
 
 <h1 class="card-header d-flex justify-content-center py-3">Movimentações Gerais do Estoque</h1>
 
-<p>
-    <a asp-action="Create" class="btn btn-outline-dark btn-lg">Inserir Movimentação</a>
-</p>
-<table class="table table-bordered border-black table-striped">
+<div class="card shadow-sm mb-4">
+
+    <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">
+            Filtros de Pesquisa
+        </h5>
+    </div>
+
+    <div class="card-body">
+
+        <form asp-action="Index" method="get">
+
+            <div class="row g-3">
+
+                <!-- PRODUTO -->
+                <div class="col-md-3">
+                    <label class="form-label fw-bold">
+                        Produto
+                    </label>
+
+                    <select name="produtoId"
+                            asp-items="ViewBag.Produtos"
+                            class="form-select">
+
+                        <option value="">
+                            Todos os Produtos
+                        </option>
+
+                    </select>
+                </div>
+
+                <!-- TIPO -->
+                <div class="col-md-2">
+                    <label class="form-label fw-bold">
+                        Tipo
+                    </label>
+
+                    <select name="tipo" class="form-select">
+
+                        <option value="">
+                            Todos
+                        </option>
+
+                        @foreach (TipoMovimentacao item in Enum.GetValues(typeof(TipoMovimentacao)))
+                        {
+                            <option value="@item"
+                                    selected="@(ViewData["TipoFiltro"]?.ToString() == item.ToString())">
+                                @item
+                            </option>
+                        }
+
+                    </select>
+                </div>
+
+                <!-- DATA INICIAL -->
+                <div class="col-md-2">
+                    <label class="form-label fw-bold">
+                        Data Inicial
+                    </label>
+
+                    <input type="date"
+                           name="dataInicio"
+                           value="@ViewData["DataInicio"]"
+                           class="form-control" />
+                </div>
+
+                <!-- DATA FINAL -->
+                <div class="col-md-2">
+                    <label class="form-label fw-bold">
+                        Data Final
+                    </label>
+
+                    <input type="date"
+                           name="dataFim"
+                           value="@ViewData["DataFim"]"
+                           class="form-control" />
+                </div>
+
+                <!-- BOTÕES -->
+                <div class="col-md-3 d-flex align-items-end gap-2">
+
+                    <button type="submit"
+                            class="btn btn-dark w-50">
+                        Filtrar
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-secondary w-50">
+                        Limpar
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<table id="TabMovimentacao" class="table table-striped table-hover align-middle">
     <thead>
         <tr>
             <th>
@@ -53,7 +153,11 @@
                 <!--<a asp-action="Details" asp-route-id="@item.Id" class="btn btn-dark btn-sm">Detalhes</a>--> 
                 <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Excluir</a>
             </td>
-        </tr>
-}
+        </tr>}
     </tbody>
 </table>
+<br />  
+<p>
+    <a asp-action="Create" class="btn btn-dark btn-lg col-md-12">Inserir Movimentação</a>
+</p>
+

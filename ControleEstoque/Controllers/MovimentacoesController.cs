@@ -17,10 +17,54 @@ namespace ControleEstoque.Controllers
         }
 
         // GET: Movimentacoes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(
+                int? produtoId,
+                TipoMovimentacao? tipo,
+                DateTime? dataInicio,
+                DateTime? dataFim) 
         {
-            var appDbContext = _context.Movimentacoes.Include(m => m.Produto);
-            return View(await appDbContext.ToListAsync());
+            var movimentacoes = _context.Movimentacoes
+                .Include(m => m.Produto)
+                .AsQueryable();
+
+            // FILTRO PRODUTO
+            if (produtoId.HasValue) {
+                movimentacoes = movimentacoes
+                    .Where(m => m.ProdutoId == produtoId.Value);
+            }
+
+            // FILTRO TIPO
+            if (tipo.HasValue) {
+                movimentacoes = movimentacoes
+                    .Where(m => m.Tipo == tipo.Value);
+            }
+
+            // FILTRO DATA INICIAL
+            if (dataInicio.HasValue) {
+                movimentacoes = movimentacoes
+                    .Where(m => m.Data >= dataInicio.Value);
+            }
+
+            // FILTRO DATA FINAL
+            if (dataFim.HasValue) {
+                movimentacoes = movimentacoes
+                    .Where(m => m.Data <= dataFim.Value);
+            }
+
+            // DROPDOWN PRODUTOS
+            ViewBag.Produtos = new SelectList(
+                _context.Produtos,
+                "Id",
+                "Nome",
+                produtoId
+            );
+
+            // VIEWDATA
+            ViewData["TipoFiltro"] = tipo;
+            ViewData["DataInicio"] = dataInicio?.ToString("yyyy-MM-dd");
+            ViewData["DataFim"] = dataFim?.ToString("yyyy-MM-dd");
+
+            return View(await movimentacoes.ToListAsync());            
         }
 
         // GET: Movimentacoes/Details/5

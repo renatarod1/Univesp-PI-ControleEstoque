@@ -28,10 +28,7 @@
                         </li>
                         <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Movimentacoes" asp-action="Index">Movimentações</a>
-                        </li>
-                        <!--<li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>-->
+                        </li>                       
                     </ul>
                 </div>
             </div>
@@ -51,6 +48,33 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
+<script>
+    $(document).ready(function () {
+        $('#TabMovimentacao').DataTable({
+            searching: false,
+            lengthChange: false,
+                language: {
+                    "sProcessing":   "Processando...",
+                    "sLengthMenu":   "Mostrar _MENU_ registros",
+                    "sZeroRecords":  "Nenhum registro encontrado",
+                    "sInfo":         "Mostrando _START_ até _END_ de _TOTAL_ registros",
+                    "sInfoEmpty":    "Mostrando 0 até 0 de 0 registros",
+                    "sInfoFiltered": "(filtrado de _MAX_ registros no total)",
+                    "sSearch":       "Pesquisar:",
+                    "oPaginate": {
+                    "sFirst":    "Primeiro",
+                    "sLast":     "Último",
+                    "sNext":     "Próximo",
+                    "sPrevious": "Anterior"
+                    }
+            }
+        });
+    });
+</script>
