@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using ControleEstoque.Data;
+using ControleEstoque.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using ControleEstoque.Data;
-using ControleEstoque.Models;
+using System.Globalization;
 
 namespace ControleEstoque.Controllers
 {
@@ -59,6 +56,10 @@ namespace ControleEstoque.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ProdutoId,Preco,Tipo,Quantidade,Data")] Movimentacao movimentacao)
         {
+
+            var valor = Request.Form["Preco"].ToString().Replace(".", ",");
+            movimentacao.Preco = decimal.Parse(valor, new CultureInfo("pt-BR"));
+
             if (ModelState.IsValid)
             {
                 // VALIDAR SAÍDA
@@ -91,7 +92,7 @@ namespace ControleEstoque.Controllers
                     }
                 }
                 //FIM VALIDAR SAÍDA
-
+                
                 _context.Add(movimentacao);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -133,6 +134,8 @@ namespace ControleEstoque.Controllers
             {
                 try
                 {
+                    var valor = Request.Form["Preco"].ToString().Replace(".", ",");
+                    movimentacao.Preco = decimal.Parse(valor, new CultureInfo("pt-BR"));
 
                     // VALIDAR SAÍDA
                     if (movimentacao.Tipo == TipoMovimentacao.Saida) {
@@ -164,6 +167,7 @@ namespace ControleEstoque.Controllers
                         }
                     }
                     //FIM VALIDAR SAÍDA
+
                     _context.Update(movimentacao);
                     await _context.SaveChangesAsync();
                 }

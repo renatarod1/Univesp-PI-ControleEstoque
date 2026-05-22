@@ -8,6 +8,7 @@ namespace ControleEstoque.Models {
         [StringLength(100)]
         public string Nome { get; set; } = string.Empty;
 
+        [Range(1, 999999, ErrorMessage = "O campo Quantidade Mínima deve estar entre 1 e 999999.")]
         public int QtdEstoqueAlerta { get; set; }
 
         public ICollection<Movimentacao>? Movimentacoes { get; set; }

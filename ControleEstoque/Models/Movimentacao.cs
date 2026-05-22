@@ -12,18 +12,16 @@ namespace ControleEstoque.Models {
         [ForeignKey(nameof(ProdutoId))]
         public Produto? Produto { get; set; }
 
-        [Required(ErrorMessage = "O preço é obrigatório.")]
-        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = true)]
-        [Range(0.01, 9999999999999999.99, ErrorMessage = "O preço deve estar entre 0,01 e 9999999999999999,99.")]
-        [Column(TypeName = "decimal(18,2)")]
+        [Required]
         [Display(Name = "Preço")]
-        [Precision(18, 2)]
-        public decimal Preco { get; set; }
+        [Range(0.01, 999999.99)]
+        [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
+        public decimal Preco { get; set; } = 0.00m;
 
         [Required]
         public TipoMovimentacao Tipo { get; set; }
 
-        [Range(1, 999999)]
+        [Range(1, 999999, ErrorMessage = "O campo Quantidade deve estar entre 1 e 999999.")]
         public int Quantidade { get; set; }
 
         public DateTime Data { get; set; } = DateTime.Now;
