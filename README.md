@@ -24,7 +24,7 @@ Desenvolvido por alunos da Univesp.
 
 ## Telas Principais do Sistema:
 
-<img src="principal1.png" alt="Sistema Genérico de Gestão de Estoque" width="300" height="200">
-![Sistema Genérico de Gestão de Estoque](principal1.png)
+<img src="principal1.png" alt="Sistema Genérico de Gestão de Estoque" width="600" height="600">
+<img src="principal2.png" alt="Sistema Genérico de Gestão de Estoque" width="600" height="1000">
 
-![Logo do Projeto](principal2.png)
+
