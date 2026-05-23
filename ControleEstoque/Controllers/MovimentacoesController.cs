@@ -142,7 +142,7 @@ namespace ControleEstoque.Controllers
         public IActionResult Create()
         {
             ViewData["ProdutoId"] = new SelectList(_context.Produtos, "Id", "Nome");
-            return View();
+            return View(new Movimentacao());
         }
 
         // POST: Movimentacoes/Create
@@ -152,20 +152,22 @@ namespace ControleEstoque.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ProdutoId,Preco,Tipo,Quantidade,Observacao,Data")] Movimentacao movimentacao)
         {
-            if (ModelState.IsValid)
-            {
-                var valor = Request.Form["Preco"]
-                        .ToString()
-                        .Replace(".", ",");
-                
-                movimentacao.Preco = decimal.Parse(
-                    valor,
-                    new CultureInfo("pt-BR"));
+            // =========================================
+            // SAÍDA → BUSCA ÚLTIMO PREÇO AUTOMATICAMENTE
+            // =========================================
 
-                bool estoqueValido = await ValidarSaidaAsync(movimentacao);
+            if (movimentacao.Tipo == TipoMovimentacao.Saida) {
+                var ultimaEntrada = await _context.Movimentacoes
+                    .Where(m =>
+                        m.ProdutoId == movimentacao.ProdutoId &&
+                        m.Tipo == TipoMovimentacao.Entrada)
+                    .OrderByDescending(m => m.Data)
+                    .FirstOrDefaultAsync();
 
-                if (!estoqueValido) {
-                    ModelState.AddModelError("", "Estoque insuficiente.");
+                if (ultimaEntrada == null) {
+                    ModelState.AddModelError(
+                        "",
+                        "Estoque insuficiente.");
 
                     ViewData["ProdutoId"] = new SelectList(
                         _context.Produtos,
@@ -174,15 +176,51 @@ namespace ControleEstoque.Controllers
                         movimentacao.ProdutoId);
 
                     return View(movimentacao);
-                }                
+                }
 
-                _context.Add(movimentacao);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                movimentacao.Preco = ultimaEntrada.Preco;
             }
-            ViewData["ProdutoId"] = new SelectList(_context.Produtos, "Id", "Nome", movimentacao.ProdutoId);
-            return View(movimentacao);
+            else {
+                // ENTRADA (preço digitado pelo usuário)
+
+                var valor = Request.Form["Preco"]
+                    .ToString()
+                    .Replace(".", ",");
+
+                movimentacao.Preco = decimal.Parse(
+                    valor,
+                    new CultureInfo("pt-BR"));
+            }
+
+            // =========================================
+            // VALIDA ESTOQUE
+            // =========================================
+
+            bool estoqueValido = await ValidarSaidaAsync(movimentacao);
+
+            if (!estoqueValido) {
+                ModelState.AddModelError("", "Estoque insuficiente.");
+
+                ViewData["ProdutoId"] = new SelectList(
+                    _context.Produtos,
+                    "Id",
+                    "Nome",
+                    movimentacao.ProdutoId);
+
+                return View(movimentacao);
+            }
+
+            // =========================================
+            // SALVA
+            // =========================================
+
+            _context.Add(movimentacao);
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
+        
 
         private bool MovimentacaoExists(int id)
         {

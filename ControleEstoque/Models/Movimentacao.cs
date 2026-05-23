@@ -11,8 +11,7 @@ namespace ControleEstoque.Models {
 
         [ForeignKey(nameof(ProdutoId))]
         public Produto? Produto { get; set; }
-
-        [Required]
+                
         [Display(Name = "Preço")]
         [Range(0.01, 999999.99)]
         [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]

@@ -12,34 +12,35 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ProdutoId" class="control-label">Produto:</label>
+                <strong><label asp-for="ProdutoId" class="control-label">Produto:</label></strong>
                 <select asp-for="ProdutoId" class ="form-control" asp-items="ViewBag.ProdutoId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Preco" class="control-label"> Preço R$:</label>
-                <input asp-for="Preco" class="form-control" placeholder="Digite ponto para separar as casas decimais. Ex: 22.50"/>
-                <span asp-validation-for="Preco" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Tipo" class="control-label">Tipo de Movimentação:</label>
-                <select asp-for="Tipo" class="form-control">
+                <strong><label asp-for="Tipo" class="control-label">Tipo de Movimentação:</label></strong>
+                <select asp-for="Tipo" class="form-control" id="tipoMovimentacao">
                     <option value="1">Entrada</option>
                     <option value="2">Saída</option>
                 </select>
                 <span asp-validation-for="Tipo" class="text-danger"></span>
             </div>
+            <div class="form-group" id="campoPreco" style="@(Model?.Tipo == TipoMovimentacao.Saida? "display:none;": "")">
+                <strong><label asp-for="Preco" class="control-label">Preço R$:</label></strong><br />
+                <strong>Digite ponto para separar as cadas decimais Ex: 22.50</strong>
+                <input asp-for="Preco" class="form-control" placeholder="Digite ponto para separar as casas decimais. Ex: 22.50"/>
+                <span asp-validation-for="Preco" class="text-danger"></span>
+            </div>            
             <div class="form-group">
-                <label asp-for="Quantidade" class="control-label">Quantidade:</label>
+                <strong><label asp-for="Quantidade" class="control-label">Quantidade:</label></strong>
                 <input asp-for="Quantidade" class="form-control" />
                 <span asp-validation-for="Quantidade" class="text-danger"></span>
             </div>
              <div class="form-group">
-                <label asp-for="Observacao" class="control-label">Observação do Produto:</label>
+                <strong><label asp-for="Observacao" class="control-label">Observação do Produto:</label></strong>
                 <textarea asp-for="Observacao" class="form-control" rows="8" placeholder="Digite a observação aqui..."></textarea>
                 <span asp-validation-for="Observacao" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Data" class="control-label">Data:</label>
+                <strong><label asp-for="Data" class="control-label">Data:</label></strong>
                 <input asp-for="Data" class="form-control" />
                 <span asp-validation-for="Data" class="text-danger"></span>
             </div>
@@ -53,5 +54,23 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        const tipo = document.getElementById("tipoMovimentacao");
+        const campoPreco = document.getElementById("campoPreco");
+
+        function controlarPreco() {
+            if (tipo.value == "2") {
+                campoPreco.style.display = "none";
+            } else {
+                campoPreco.style.display = "block";
+            }
+        }
+        controlarPreco();
+        tipo.addEventListener("change", controlarPreco);
+    </script>
 }
+
+
