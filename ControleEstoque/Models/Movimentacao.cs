@@ -16,14 +16,17 @@ namespace ControleEstoque.Models {
         [Display(Name = "Preço")]
         [Range(0.01, 999999.99)]
         [DisplayFormat(DataFormatString = "{0:N2}", ApplyFormatInEditMode = true)]
+        [Column(TypeName = "decimal(18,2)")]
         public decimal Preco { get; set; } = 0.00m;
 
         [Required]
         public TipoMovimentacao Tipo { get; set; }
 
+
+        [Required]
         [Range(1, 999999, ErrorMessage = "O campo Quantidade deve estar entre 1 e 999999.")]
         public int Quantidade { get; set; }
 
-        public DateTime Data { get; set; } = DateTime.Now;
+        public DateTime Data { get; set; } = DateTime.UtcNow;
     }
 }
