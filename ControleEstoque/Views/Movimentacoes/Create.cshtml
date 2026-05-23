@@ -16,8 +16,8 @@
                 <select asp-for="ProdutoId" class ="form-control" asp-items="ViewBag.ProdutoId"></select>
             </div>
             <div class="form-group">
-                <label asp-for="Preco" class="control-label">Preço R$:</label>
-                <input asp-for="Preco" class="form-control"/>
+                <label asp-for="Preco" class="control-label"> Preço R$:</label>
+                <input asp-for="Preco" class="form-control" placeholder="Digite ponto para separar as casas decimais. Ex: 22.50"/>
                 <span asp-validation-for="Preco" class="text-danger"></span>
             </div>
             <div class="form-group">

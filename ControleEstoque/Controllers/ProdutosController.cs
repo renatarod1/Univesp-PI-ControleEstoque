@@ -22,7 +22,7 @@ namespace ControleEstoque.Controllers
 
         // GET: Produtos
         public async Task<IActionResult> Index() {
-            var produtos = await _context.Produtos
+            /*var produtos = await _context.Produtos
                 .Include(p => p.Movimentacoes)
                 .ToListAsync();
 
@@ -46,6 +46,46 @@ namespace ControleEstoque.Controllers
                     Alerta = estoqueAtual <= p.QtdEstoqueAlerta
                 };
             }).ToList();
+
+            return View(lista);*/
+
+            var produtos = await _context.Produtos
+                .Include(p => p.Movimentacoes)
+                .ToListAsync();
+
+            var lista = produtos.Select(p =>
+            {
+                int entradas = p.Movimentacoes?
+                    .Where(m => m.Tipo == TipoMovimentacao.Entrada)
+                    .Sum(m => m.Quantidade) ?? 0;
+
+                int saidas = p.Movimentacoes?
+                    .Where(m => m.Tipo == TipoMovimentacao.Saida)
+                    .Sum(m => m.Quantidade) ?? 0;
+
+                int estoqueAtual = entradas - saidas;
+
+                decimal valorEntradas = p.Movimentacoes?
+                    .Where(m => m.Tipo == TipoMovimentacao.Entrada)
+                    .Sum(m => m.Quantidade * m.Preco) ?? 0;
+
+                decimal valorSaidas = p.Movimentacoes?
+                    .Where(m => m.Tipo == TipoMovimentacao.Saida)
+                    .Sum(m => m.Quantidade * m.Preco) ?? 0;
+
+                decimal valorEstoque = valorEntradas - valorSaidas;
+
+                return new ProdutoEstoqueViewModel {
+                    Id = p.Id,
+                    Nome = p.Nome,
+                    EstoqueAtual = estoqueAtual,
+                    QtdEstoqueAlerta = p.QtdEstoqueAlerta,
+                    ValorEstoque = valorEstoque,
+                    Alerta = estoqueAtual <= p.QtdEstoqueAlerta
+                };
+            }).ToList();
+
+            ViewBag.ValorTotalEstoque = lista.Sum(x => x.ValorEstoque);
 
             return View(lista);
         }

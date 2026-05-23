@@ -5,51 +5,37 @@
     ViewData["Title"] = "Index";
 }
 
-<h1 class="card-header d-flex justify-content-center py-3">Movimentações Gerais do Estoque</h1>
+<h1 class="card-header d-flex justify-content-center py-3">Movimentações e Resumo do Estoque</h1>
 
 <div class="card shadow-sm mb-4">
-
     <div class="card-header bg-dark text-white">
         <h5 class="mb-0">
             Filtros de Pesquisa
         </h5>
     </div>
-
     <div class="card-body">
-
         <form asp-action="Index" method="get">
-
-            <div class="row g-3">
-
-                <!-- PRODUTO -->
+            <div class="row g-3">                
                 <div class="col-md-3">
                     <label class="form-label fw-bold">
                         Produto
                     </label>
-
                     <select name="produtoId"
                             asp-items="ViewBag.Produtos"
                             class="form-select">
-
                         <option value="">
                             Todos os Produtos
                         </option>
-
                     </select>
-                </div>
-
-                <!-- TIPO -->
+                </div>                
                 <div class="col-md-2">
                     <label class="form-label fw-bold">
                         Tipo
                     </label>
-
                     <select name="tipo" class="form-select">
-
                         <option value="">
                             Todos
                         </option>
-
                         @foreach (TipoMovimentacao item in Enum.GetValues(typeof(TipoMovimentacao)))
                         {
                             <option value="@item"
@@ -57,23 +43,17 @@
                                 @item
                             </option>
                         }
-
                     </select>
-                </div>
-
-                <!-- DATA INICIAL -->
+                </div>                
                 <div class="col-md-2">
                     <label class="form-label fw-bold">
                         Data Inicial
                     </label>
-
                     <input type="date"
                            name="dataInicio"
                            value="@ViewData["DataInicio"]"
                            class="form-control" />
-                </div>
-
-                <!-- DATA FINAL -->
+                </div>                
                 <div class="col-md-2">
                     <label class="form-label fw-bold">
                         Data Final
@@ -84,80 +64,131 @@
                            value="@ViewData["DataFim"]"
                            class="form-control" />
                 </div>
-
-                <!-- BOTÕES -->
                 <div class="col-md-3 d-flex align-items-end gap-2">
-
                     <button type="submit"
                             class="btn btn-dark w-50">
                         Filtrar
                     </button>
-
                     <a asp-action="Index"
                        class="btn btn-secondary w-50">
                         Limpar
                     </a>
-
                 </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card border-success shadow-sm">
+            <div class="card-body text-center">
+
+                <h5 class="text-success">
+                    Valor Total em Estoque
+                </h5>
+
+                <h3>
+                    @(((decimal)ViewBag.ValorTotalEstoque).ToString("C"))
+                </h3>
 
             </div>
-
-        </form>
-
+        </div>
     </div>
+    <div class="col-md-6">
+        <div class="card border-primary shadow-sm">
+            <div class="card-body text-center">
 
+                <h5 class="text-primary">
+                    Quantidade Total em Estoque
+                </h5>
+
+                <h3>
+                    @ViewBag.SaldoEstoque
+                </h3>
+
+            </div>
+        </div>
+    </div>
 </div>
-
-
-<table id="TabMovimentacao" class="table table-striped table-hover align-middle">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Produto)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Preco)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Tipo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantidade)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Data)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @(item.Produto?.Nome ?? "")
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Preco)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tipo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantidade)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Data)
-            </td>
-            <td>
-                <!--<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-dark btn-sm">Editar</a>--> 
-                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-dark btn-sm">Detalhes</a>
-                <!--<a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Excluir</a>-->
-            </td>
-        </tr>}
-    </tbody>
-</table>
+<div class="card shadow-sm mb-4">
+     <div class="card-header bg-dark text-white">
+        <h5 class="mb-0">
+            Resumo por Produto
+        </h5>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Quantidade</th>
+                    <th>Valor em Estoque</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.ResumoProdutos)
+                {
+                    <tr>
+                        <td>@item.Produto</td>
+                        <td>@item.Quantidade</td>
+                        <td>
+                            @(((decimal)item.Valor).ToString("C"))
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="card shadow-sm mb-4">
+    <table id="TabMovimentacao" class="table table-striped table-hover align-middle">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Produto)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Preco)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Tipo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Quantidade)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Data)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @(item.Produto?.Nome ?? "")
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Preco)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Tipo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantidade)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Data)
+                </td>
+                <td>
+                   <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-dark btn-sm">Detalhes</a>                    
+                </td>
+            </tr>}
+        </tbody>
+    </table>
+</div>
 <br />  
 <p>
-    <a asp-action="Create" class="btn btn-dark btn-lg col-md-12">Inserir Movimentação</a>
+    <a asp-action="Create" class="btn btn-danger btn-lg col-md-12">Inserir Movimentação</a>
 </p>
 

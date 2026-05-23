@@ -6,6 +6,8 @@
 
         public int EstoqueAtual { get; set; }
 
+        public decimal ValorEstoque { get; set; }
+
         public int QtdEstoqueAlerta { get; set; }
 
         public bool Alerta { get; set; }

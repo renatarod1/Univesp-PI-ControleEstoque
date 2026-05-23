@@ -4,7 +4,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1 class="card-header d-flex justify-content-center py-3">Estoque - Visão geral</h1>
+<h1 class="card-header d-flex justify-content-center py-3">Resumo e Situação Atual do Estoque</h1>
 <br />
 
 <p>
@@ -64,4 +64,20 @@
         }
     </tbody>
 </table>
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card border-success shadow-sm">
+            <div class="card-body text-center">
 
+                <h5 class="text-success">
+                    Valor total de Produtos em estoque:
+                </h5>
+
+                <h3>
+                    @Model.Sum(x => x.ValorEstoque).ToString("C")
+                </h3>
+
+            </div>
+        </div>
+    </div>
+</div>

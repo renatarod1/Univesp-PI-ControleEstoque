@@ -18,11 +18,10 @@ namespace ControleEstoque.Controllers
 
         // GET: Movimentacoes
         public async Task<IActionResult> Index(
-                int? produtoId,
-                TipoMovimentacao? tipo,
-                DateTime? dataInicio,
-                DateTime? dataFim) 
-        {
+            int? produtoId,
+            TipoMovimentacao? tipo,
+            DateTime? dataInicio,
+            DateTime? dataFim) {
             var movimentacoes = _context.Movimentacoes
                 .Include(m => m.Produto)
                 .AsQueryable();
@@ -51,6 +50,59 @@ namespace ControleEstoque.Controllers
                     .Where(m => m.Data <= dataFim.Value);
             }
 
+            var lista = await movimentacoes
+                .OrderByDescending(m => m.Data)
+                .ToListAsync();
+
+            // =========================================
+            // RESUMO FINANCEIRO FILTRADO
+            // =========================================
+            decimal valorEntradas = lista
+                .Where(m => m.Tipo == TipoMovimentacao.Entrada)
+                .Sum(m => m.Quantidade * m.Preco);
+
+            decimal valorSaidas = lista
+                .Where(m => m.Tipo == TipoMovimentacao.Saida)
+                .Sum(m => m.Quantidade * m.Preco);
+
+            decimal valorTotalEstoque = valorEntradas - valorSaidas;
+
+            int qtdEntradas = lista
+                .Where(m => m.Tipo == TipoMovimentacao.Entrada)
+                .Sum(m => m.Quantidade);
+
+            int qtdSaidas = lista
+                .Where(m => m.Tipo == TipoMovimentacao.Saida)
+                .Sum(m => m.Quantidade);
+
+            int saldoEstoque = qtdEntradas - qtdSaidas;
+
+            // =========================================
+            // RESUMO POR PRODUTO
+            // =========================================
+
+            var resumoProdutos = lista
+                .GroupBy(m => m.Produto!.Nome)
+                .Select(g => new {
+                    Produto = g.Key,
+
+                    Quantidade = g.Sum(m =>
+                        m.Tipo == TipoMovimentacao.Entrada
+                            ? m.Quantidade
+                            : -m.Quantidade),
+
+                    Valor = g.Sum(m =>
+                        m.Tipo == TipoMovimentacao.Entrada
+                            ? m.Quantidade * m.Preco
+                            : -m.Quantidade * m.Preco)
+                })
+                .ToList();
+
+            // VIEWBAG
+            ViewBag.ValorTotalEstoque = valorTotalEstoque;
+            ViewBag.SaldoEstoque = saldoEstoque;
+            ViewBag.ResumoProdutos = resumoProdutos;
+
             // DROPDOWN PRODUTOS
             ViewBag.Produtos = new SelectList(
                 _context.Produtos,
@@ -64,7 +116,7 @@ namespace ControleEstoque.Controllers
             ViewData["DataInicio"] = dataInicio?.ToString("yyyy-MM-dd");
             ViewData["DataFim"] = dataFim?.ToString("yyyy-MM-dd");
 
-            return View(await movimentacoes.ToListAsync());            
+            return View(lista);
         }
 
         // GET: Movimentacoes/Details/5
