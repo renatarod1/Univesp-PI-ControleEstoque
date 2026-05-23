@@ -4,6 +4,8 @@
 
 Este é um projeto desenvolvido com o objetivo de demonstrar a implementação de uma aplicação web, utilizando o padrão MVC (Model-View-Controller) e algumas práticas de desenvolvimento com a plataforma .NET.
 
+Desenvolvido por alunos da Univesp. 
+
 ### Tecnologias Utilizadas:
 
 * Linguagem: C#
@@ -20,6 +22,9 @@ Este é um projeto desenvolvido com o objetivo de demonstrar a implementação d
 * Interface responsiva e amigável.
 * Listagem com busca, ordenação e paginação via DataTables 
 
-Desenvolvido por alunos da Univesp. 
+## Telas Principais do Sistema:
 
+<img src="principal1.png" alt="Sistema Genérico de Gestão de Estoque" width="300" height="200">
 ![Logo do Projeto](principal1.png)
+
+![Logo do Projeto](principal2.png)
