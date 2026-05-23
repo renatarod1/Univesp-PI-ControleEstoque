@@ -21,3 +21,5 @@ Este é um projeto desenvolvido com o objetivo de demonstrar a implementação d
 * Listagem com busca, ordenação e paginação via DataTables 
 
 Desenvolvido por alunos da Univesp. 
+
+![Logo do Projeto](principal1.png)
