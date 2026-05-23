@@ -1,6 +1,6 @@
 # UNIVESP - Projeto Integrador 1 - Sistema Genérico de Gestão de Estoque
 
-## Projeto ASP.NET Core MVC
+## Projeto ASP.NET Core MVC ![.NET](https://shields.io)
 
 Este é um projeto desenvolvido com o objetivo de demonstrar a implementação de uma aplicação web, utilizando o padrão MVC (Model-View-Controller) e algumas práticas de desenvolvimento com a plataforma .NET.
 
