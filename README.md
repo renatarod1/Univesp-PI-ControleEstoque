@@ -1,11 +1,12 @@
 # UNIVESP - Projeto Integrador 1 - Sistema Genérico de Gestão de Estoque
-# Projeto ASP.NET Core MVC
+
+##Projeto ASP.NET Core MVC
 
 Este é um projeto desenvolvido com o objetivo de demonstrar a implementação de uma aplicação web robusta utilizando o padrão MVC (Model-View-Controller) e algumas práticas de desenvolvimento com a plataforma .NET.
 
-#Tecnologias Utilizadas:
+##Tecnologias Utilizadas:
 
-*Linguagem: C#
+-Linguagem: C#
 *Framework Web: ASP.NET Core MVC
 *Framework ORM - Mapeador Objeto-Relacional: Entity Framework Core
 *Abordagem de Banco de Dados: Code First (Migrações automáticas)
