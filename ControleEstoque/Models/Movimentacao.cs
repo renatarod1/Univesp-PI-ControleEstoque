@@ -22,10 +22,12 @@ namespace ControleEstoque.Models {
         [Required]
         public TipoMovimentacao Tipo { get; set; }
 
-
         [Required]
         [Range(1, 999999, ErrorMessage = "O campo Quantidade deve estar entre 1 e 999999.")]
         public int Quantidade { get; set; }
+
+        [StringLength(500, ErrorMessage = "Máximo de 500 caracteres.")]
+        public string? Observacao { get; set; }
 
         public DateTime Data { get; set; } = DateTime.UtcNow;
     }

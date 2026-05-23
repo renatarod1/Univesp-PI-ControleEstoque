@@ -79,7 +79,7 @@ namespace ControleEstoque.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Nome,QtdEstoqueAlerta")] Produto produto)
+        public async Task<IActionResult> Create([Bind("Id,Nome,Descricao,QtdEstoqueAlerta")] Produto produto)
         {
             if (ModelState.IsValid)
             {
@@ -111,7 +111,7 @@ namespace ControleEstoque.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,QtdEstoqueAlerta")] Produto produto)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Descricao,QtdEstoqueAlerta")] Produto produto)
         {
             if (id != produto.Id)
             {

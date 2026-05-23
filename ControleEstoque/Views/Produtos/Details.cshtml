@@ -4,27 +4,35 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+<h1>Detalhes do Produto</h1>
 
 <div>
-    <h4>Produto</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Nome)
+        <dt class = "col-sm-4 ">
+            Nome:
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-8">
             @Html.DisplayFor(model => model.Nome)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.QtdEstoqueAlerta)
+        </dd>        
+        <dt class="col-sm-4">
+            Descrição:
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Descricao)           
+        </dd>
+        <dt class = "col-sm-4">            
+            Quantidade mínima no estoque para emitir alerta:
+        </dt>
+        <dd class = "col-sm-8">
             @Html.DisplayFor(model => model.QtdEstoqueAlerta)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <!--<a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a>-->
+    <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">Editar</a>
+    <a asp-action="Index" class="btn btn-outline-dark">Voltar para Lista de Produtos</a>
+    <!--<a asp-action="Index">Back to List</a>-->
 </div>
+
