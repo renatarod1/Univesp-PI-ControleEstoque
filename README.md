@@ -6,8 +6,6 @@ Este é um projeto desenvolvido com o objetivo de demonstrar a implementação d
 
 Desenvolvido por alunos da Univesp. 
 
-Visite a aplicação [Controle de Estoque](https://controleestoquepiunivesp.azurewebsites.net/) 
-
 ### Tecnologias Utilizadas:
 
 * Linguagem: C#
